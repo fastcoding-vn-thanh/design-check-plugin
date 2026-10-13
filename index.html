@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design rules</title>
+<meta name="description" content="How to build a Figma file that the kit can turn into code. 54 rules, for designers.">
+<style>
+  :root {
+    --bg: #ffffff; --bg-2: #f6f7f9; --text: #1d2129; --muted: #626a77; --border: #e3e6ea;
+    --accent: #0b6bcb; --must: #c4320a; --should: #8a5a00; --target: #fff6d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171b; --bg-2: #1e2127; --text: #e6e8eb; --muted: #9aa2ad; --border: #30343b;
+      --accent: #5aa9f5; --must: #ff8a65; --should: #e0b252; --target: #3a3320;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15171b; --bg-2: #1e2127; --text: #e6e8eb; --muted: #9aa2ad; --border: #30343b;
+    --accent: #5aa9f5; --must: #ff8a65; --should: #e0b252; --target: #3a3320;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif; }
+  .layout { max-width: 1120px; margin: 0 auto; padding: 0 16px; display: grid; gap: 48px; }
+  @media (min-width: 960px) { .layout { grid-template-columns: 220px minmax(0, 1fr); } }
+  nav { padding-top: 32px; }
+  @media (min-width: 960px) { nav { position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; } }
+  nav h2 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  nav ul { list-style: none; margin: 0; padding: 0; }
+  nav a { display: block; padding: 3px 0; color: var(--text); text-decoration: none; font-size: 14px; }
+  nav a:hover { color: var(--accent); }
+  main { padding: 32px 0 96px; min-width: 0; }
+  h1 { font-size: 2.2rem; line-height: 1.2; margin: 0 0 16px; }
+  h2 { font-size: 1.5rem; margin: 56px 0 12px; padding-top: 16px; border-top: 1px solid var(--border); }
+  h3 { font-size: 1.15rem; margin: 32px 0 8px; }
+  h1, h2, h3, li.rule { scroll-margin-top: 24px; }
+  .heading-link { color: inherit; text-decoration: none; }
+  a { color: var(--accent); }
+  .rule-ref, .rule-id { white-space: nowrap; }
+  code { font: .88em ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--bg-2); padding: .1em .35em; border-radius: 4px; }
+  pre { background: var(--bg-2); padding: 16px; border-radius: 8px; overflow-x: auto; }
+  pre code { background: none; padding: 0; }
+  table { display: block; overflow-x: auto; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+  th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--bg-2); }
+  ul { padding-left: 1.4em; }
+  li.rule { list-style: none; margin: 0 0 16px -1.4em; padding: 16px; border: 1px solid var(--border); border-radius: 8px; }
+  li.rule:target { background: var(--target); border-color: var(--should); }
+  li.rule > p { margin: 0; }
+  .rule-head { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 6px; }
+  .rule-id { font-weight: 700; font-size: 1.05em; text-decoration: none; margin-right: 4px; }
+  .tag { font-size: 12px; line-height: 1; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); white-space: nowrap; }
+  .tag.must { color: var(--must); border-color: currentColor; font-weight: 700; }
+  .tag.should { color: var(--should); border-color: currentColor; font-weight: 700; }
+  .download { display: inline-block; padding: 10px 20px; border-radius: 8px; background: var(--accent); color: var(--bg); font-weight: 700; text-decoration: none; }
+  .download:hover { opacity: .9; }
+  ol.steps { padding-left: 1.4em; }
+  ol.steps > li { margin-bottom: 24px; }
+  ol.steps p { margin: 0 0 8px; }
+  figure { margin: 0; }
+  figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 8px; }
+  footer { margin-top: 64px; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav aria-label="Sections"><h2>Sections</h2><ul><li><a href="#why-these-rules-exist">Why these rules exist</a></li><li><a href="#check-your-file-with-the-design-check-plugin">Check your file with the Design Check plugin</a></li><li><a href="#readiness-levels">Readiness levels</a></li><li><a href="#how-to-read-a-rule">How to read a rule</a></li><li><a href="#checklist">Checklist</a></li><li><a href="#file">FILE</a></li><li><a href="#auto-layout">Auto Layout</a></li><li><a href="#variables-and-styles">Variables and styles</a></li><li><a href="#text">Text</a></li><li><a href="#components">Components</a></li><li><a href="#small-screen">Small screen</a></li><li><a href="#assets">Assets</a></li><li><a href="#copy-and-links">Copy and links</a></li><li><a href="#behaviour-notes">Behaviour notes</a></li></ul></nav>
+  <main>
+<h1 id="design-rules"><a class="heading-link" href="#design-rules">Design rules</a></h1>
+<p>How to build a Figma file that we can turn into a website. <strong>Written for designers.</strong> You
+do not need to know anything about code to follow it; where a rule exists because of what
+the code needs, the rule says so in one line.</p>
+<h2 id="why-these-rules-exist"><a class="heading-link" href="#why-these-rules-exist">Why these rules exist</a></h2>
+<p>We build the website from your Figma file with our coding tool, called <strong>the kit</strong> below.
+The kit copies what it finds. It does not guess what you meant:</p>
+<ul>
+<li>a spacing of 19px becomes 19px in the code</li>
+<li>a colour with no variable becomes a raw value that nobody can change later</li>
+<li>a box you placed by dragging breaks on the first screen size you did not draw</li>
+</ul>
+<p><strong>Your Figma file is the specification.</strong> Every rule below exists because breaking it
+means a question for you or a fix by hand later. Following the rules saves both of us
+that time.</p>
+<h2 id="check-your-file-with-the-design-check-plugin"><a class="heading-link" href="#check-your-file-with-the-design-check-plugin">Check your file with the Design Check plugin</a></h2>
+<p>You do not need to learn every rule before you start. The <strong>Design Check</strong> plugin checks
+the file for you and shows what to fix.</p>
+<ol>
+<li>Install the plugin once. It needs the Figma desktop app: plugins cannot be installed in
+Figma in the browser
+<p><a class="download" href="design-check-plugin.zip" download>Download the plugin (.zip)</a></p>
+<ol class="steps" type="a">
+  <li>
+    <p>Unzip <code>design-check-plugin.zip</code>. Put the <code>design-check</code> folder somewhere it can stay, such as your Documents folder. Figma loads the plugin from this folder every time, so do not delete or move it.</p>
+    <figure><img src="img/install-01.png" alt="The design-check folder after unzipping" width="800" height="294" loading="lazy"></figure>
+  </li>
+  <li>
+    <p>Open the Figma desktop app, and open any design file.</p>
+    <figure><img src="img/install-02.png" alt="A design file open in the Figma desktop app" width="1556" height="890" loading="lazy"></figure>
+  </li>
+  <li>
+    <p>Click the Figma menu at the top left, then choose <strong>Plugins → Development → Import plugin from manifest…</strong></p>
+    <figure><img src="img/install-03.png" alt="The Import plugin from manifest menu item" width="779" height="673" loading="lazy"></figure>
+  </li>
+  <li>
+    <p>Choose <code>manifest.json</code> inside the <code>design-check</code> folder. The plugin is installed.</p>
+    <figure><img src="img/install-04.png" alt="Choosing manifest.json in the file dialog" width="881" height="449" loading="lazy"></figure>
+  </li>
+</ol>
+<p><strong>To update the plugin</strong>, download the new zip and replace the <code>design-check</code> folder with the new one, in the same place. You do not need to import it again.</p>
+</li>
+<li>Open your design file and run <strong>Plugins → Development → Design Check</strong>
+<p>The menu is the Figma logo at the top left.</p>
+<figure><img src="img/install-05.png" alt="Design Check in the Plugins menu" width="1556" height="890" loading="lazy"></figure>
+</li>
+<li>Choose one page or all pages. If your developer gave you the list of agreed fonts,
+enter it in <strong>Agreed fonts</strong></li>
+<li>Click <strong>Check design</strong>. Every page gets a level, L0 to L3 (see
+<a href="#readiness-levels">Readiness levels</a>)
+<figure><img src="img/install-06.png" alt="The Design Check plugin after Check design: the file's level, and the findings for one page" width="1471" height="861" loading="lazy"></figure>
+</li>
+<li>Click a page to see what to fix. Click a finding to jump to that layer, and click a
+rule ID to read the rule</li>
+<li>Fix, run the check again, and the level goes up</li>
+</ol>
+<p>The plugin checks up to L3. Most of L4 is copy, links and motion, which a person signs off.
+Your developer runs the same check from the command line when the file is ready, and
+keeps that report with the project.</p>
+<h2 id="readiness-levels"><a class="heading-link" href="#readiness-levels">Readiness levels</a></h2>
+<p>The level says what the kit can do with the page, so it is also the answer to &quot;is the
+design ready?&quot;. A page reaches a level when every MUST rule at that level and below passes.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Meaning</th>
+<th>What the kit can do</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>L0</strong></td>
+<td>The kit cannot find the pages or the sections</td>
+<td>Nothing. A person reads the file by hand</td>
+</tr>
+<tr>
+<td><strong>L1</strong></td>
+<td>Pages and sections are findable</td>
+<td>Draft the sitemap, analyse the design</td>
+</tr>
+<tr>
+<td><strong>L2</strong></td>
+<td>Built with Auto Layout, colours and text on variables and styles</td>
+<td>Generate the desktop layout</td>
+</tr>
+<tr>
+<td><strong>L3</strong></td>
+<td>Small-screen frames exist and match the desktop; assets export cleanly</td>
+<td>Generate both widths in one pass</td>
+</tr>
+<tr>
+<td><strong>L4</strong></td>
+<td>Copy is final, links and states are defined, motion is described</td>
+<td>Build and deliver without going back to the designer</td>
+</tr>
+</tbody></table>
+<p><strong>L3 is the target for starting code. L4 is the target for handing the design over.</strong>
+Below L2, the code is written by hand from screenshots, and it costs more and takes longer.</p>
+<h2 id="how-to-read-a-rule"><a class="heading-link" href="#how-to-read-a-rule">How to read a rule</a></h2>
+<pre><code>  - **AL-03** · MUST · L2 · tool — Text boxes are never fixed height …
+     └ id       └ severity └ level └ who checks it
+</code></pre>
+<ul>
+<li><strong>ID.</strong> The plugin reports a finding as <code>VAR-01</code>, and you find the rule here by its ID.
+IDs never change</li>
+<li><strong>Severity.</strong> <strong>MUST</strong> — breaking it stops the work or produces a wrong page. <strong>SHOULD</strong> —
+the right default; if you break it on purpose, add a note in the file saying why</li>
+<li><strong>Level.</strong> The readiness level the rule belongs to</li>
+<li><strong>Who checks it.</strong> <code>tool</code> — the plugin finds it, and a finding keeps the page below the
+rule&#39;s level. <code>tool(part)</code> — the plugin points at places that are probably wrong; look at
+each one and decide. These do not lower the level. <code>people</code> — the plugin cannot see it,
+so check it yourself</li>
+</ul>
+<p>The IDs are separate from the ones in <code>coding-rules.md</code>, which are for developers.</p>
+<h2 id="checklist"><a class="heading-link" href="#checklist">Checklist</a></h2>
+<p>The short version. Every item links to its rule.</p>
+<ul>
+<li><input disabled="" type="checkbox"> Each page is one frame per width, named by its URL: <code>/</code>, <code>/service/web</code> — <a class="rule-ref" href="#file-01">FILE-01</a></li>
+<li><input disabled="" type="checkbox"> Sections are direct children of the page frame, full width, named <code>section-…</code> — <a class="rule-ref" href="#file-04">FILE-04</a></li>
+<li><input disabled="" type="checkbox"> Every section, and every group inside it, uses Auto Layout — <a class="rule-ref" href="#al-01">AL-01</a></li>
+<li><input disabled="" type="checkbox"> Spacing is gap and padding, never spacer boxes or dragging — <a class="rule-ref" href="#al-02">AL-02</a></li>
+<li><input disabled="" type="checkbox"> Every colour is a variable — fills, strokes, text, gradient stops, shadows — <a class="rule-ref" href="#var-01">VAR-01</a></li>
+<li><input disabled="" type="checkbox"> Every text uses a text style, in a web font the project loads — <a class="rule-ref" href="#txt-01">TXT-01</a></li>
+<li><input disabled="" type="checkbox"> Anything on two pages is a component; buttons and links have a <code>Hover</code> variant — <a class="rule-ref" href="#cmp-01">CMP-01</a></li>
+<li><input disabled="" type="checkbox"> Every desktop page has a small-screen frame with the same sections and the same copy — <a class="rule-ref" href="#sp-01">SP-01</a></li>
+<li><input disabled="" type="checkbox"> Every image and icon has a real name and exports as one piece — <a class="rule-ref" href="#ast-01">AST-01</a></li>
+<li><input disabled="" type="checkbox"> A picture made of several layers is one frame with an export setting — <a class="rule-ref" href="#ast-07">AST-07</a></li>
+<li><input disabled="" type="checkbox"> A thumbnail or article photo is a single image layer — <a class="rule-ref" href="#ast-08">AST-08</a></li>
+<li><input disabled="" type="checkbox"> No dummy copy; every button knows where it goes — <a class="rule-ref" href="#cpy-01">CPY-01</a></li>
+<li><input disabled="" type="checkbox"> Everything that moves has a written note — <a class="rule-ref" href="#spec-01">SPEC-01</a></li>
+</ul>
+<hr>
+<h2 id="file"><a class="heading-link" href="#file">FILE</a></h2>
+<p>How the kit finds your pages and sections. If these fail, nothing else can be checked.</p>
+<ul>
+<li class="rule" id="file-01"><span class="rule-head"><a class="rule-id" href="#file-01">FILE-01</a><span class="tag must">MUST</span><span class="tag level">L1</span><span class="tag checker">checked by the plugin</span></span> <strong>Name each page frame by its URL path.</strong> The top page is
+<code>/</code>, the others are <code>/about</code>, <code>/service/web</code>, <code>/news/detail</code>. Lowercase, English,
+hyphens. The kit finds pages only by this name; a frame called <code>TOP</code> or <code>サービス詳細</code> is
+invisible to it</li>
+<li class="rule" id="file-02"><span class="rule-head"><a class="rule-id" href="#file-02">FILE-02</a><span class="tag must">MUST</span><span class="tag level">L1</span><span class="tag checker">checked by the plugin</span></span> <strong>One frame per page per width.</strong> Exactly one desktop
+frame and one small-screen frame carry a given path. An old version, an alternative or a
+draft is renamed so its name no longer starts with <code>/</code> — <code>about (old)</code>,
+<code>about option B</code> — and is best moved to a page called <code>Archive</code> as well. Two frames
+named <code>/about</code> means the kit has to guess which one is real</li>
+<li class="rule" id="file-03"><span class="rule-head"><a class="rule-id" href="#file-03">FILE-03</a><span class="tag must">MUST</span><span class="tag level">L1</span><span class="tag checker">checked by the plugin</span></span> <strong>Use the same artboard widths everywhere.</strong> One desktop
+width (for example 1440 or 1920) and one small-screen width (390 or 375) for the whole
+file. A small-screen frame is anything narrower than 768</li>
+<li class="rule" id="file-04"><span class="rule-head"><a class="rule-id" href="#file-04">FILE-04</a><span class="tag must">MUST</span><span class="tag level">L1</span><span class="tag checker">checked by the plugin</span></span> <strong>Sections are direct children of the page frame.</strong> Each
+one is a frame that spans the full page width, named <code>section-</code> plus what it is:
+<code>section-kv</code>, <code>section-news</code>, <code>section-faq</code>. The header and footer are instances of the
+header and footer components (<a class="rule-ref" href="#cmp-01">CMP-01</a>), not sections</li>
+<li class="rule" id="file-05"><span class="rule-head"><a class="rule-id" href="#file-05">FILE-05</a><span class="tag must">MUST</span><span class="tag level">L1</span><span class="tag checker">checked by the plugin</span></span> <strong>Sections do not overlap.</strong> They stack top to bottom,
+and their order in the layers panel is their order on the page. When the next section has
+to sit on top of the previous one (a card pulled up over a hero image), do that <strong>inside</strong>
+one section with a negative margin or an absolute child (<a class="rule-ref" href="#al-05">AL-05</a>), never by making two
+section frames overlap</li>
+<li class="rule" id="file-06"><span class="rule-head"><a class="rule-id" href="#file-06">FILE-06</a><span class="tag must">MUST</span><span class="tag level">L1</span><span class="tag checker">checked by the plugin</span></span> <strong>Frames fit their content.</strong> A section frame hugs its
+content (Auto Layout, height <code>Hug</code>). A frame 300px taller than what is inside it is
+measured as 300px of empty space and built that way</li>
+<li class="rule" id="file-07"><span class="rule-head"><a class="rule-id" href="#file-07">FILE-07</a><span class="tag should">SHOULD</span><span class="tag level">L1</span><span class="tag checker">checked by a person</span></span> <strong>Keep the working pages clean.</strong> Put components on
+a page called <code>Components</code>, notes and specifications on <code>Spec</code>, and anything old on
+<code>Archive</code>. The kit reads the whole file; everything you leave on a working page, it has
+to decide about</li>
+</ul>
+<h2 id="auto-layout"><a class="heading-link" href="#auto-layout">Auto Layout</a></h2>
+<p><strong>This is the rule that decides most about the code.</strong> An Auto Layout frame translates
+directly into a CSS layout: the kit reads the direction, the gap and the padding, and the
+browser does the rest, at every screen width. A frame without Auto Layout only has
+coordinates — &quot;this box is at x=347&quot; — and a developer has to guess what you meant by
+them. The guess is often wrong, and it is wrong again on every screen size you did not
+draw.</p>
+<p>What your setting becomes in the code:</p>
+<table>
+<thead>
+<tr>
+<th>In Figma</th>
+<th>In the code</th>
+<th>What it means for the page</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Auto Layout, horizontal</td>
+<td>a flex row</td>
+<td>items sit side by side</td>
+</tr>
+<tr>
+<td>Auto Layout, vertical</td>
+<td>a stack</td>
+<td>items sit one under another</td>
+</tr>
+<tr>
+<td>Gap between items</td>
+<td><code>gap</code></td>
+<td>the space stays exact when content changes</td>
+</tr>
+<tr>
+<td>Padding</td>
+<td><code>padding</code></td>
+<td>the space inside the box stays exact</td>
+</tr>
+<tr>
+<td>Wrap</td>
+<td><code>flex-wrap</code></td>
+<td>a row of cards flows onto a second line when it runs out of room</td>
+</tr>
+<tr>
+<td>Space between</td>
+<td><code>justify-content: space-between</code></td>
+<td>first and last item pinned to the edges</td>
+</tr>
+<tr>
+<td>Alignment (the 9-dot grid)</td>
+<td><code>align-items</code> / <code>justify-content</code></td>
+<td>centred means centred at every width</td>
+</tr>
+<tr>
+<td>Width <code>Fill container</code></td>
+<td>grows to fill</td>
+<td>the box stretches with the screen</td>
+</tr>
+<tr>
+<td>Width <code>Hug contents</code></td>
+<td>fits its content</td>
+<td>the box is as wide as its text</td>
+</tr>
+<tr>
+<td>Width <code>Fixed</code></td>
+<td>a fixed width</td>
+<td>the box stays that size — and overflows a narrower screen</td>
+</tr>
+<tr>
+<td><code>Absolute position</code> child</td>
+<td><code>position: absolute</code></td>
+<td>taken out of the flow, placed on top</td>
+</tr>
+<tr>
+<td>Frame, no Auto Layout</td>
+<td>coordinates only</td>
+<td><strong>a developer guesses</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li class="rule" id="al-01"><span class="rule-head"><a class="rule-id" href="#al-01">AL-01</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Every section uses Auto Layout, all the way down.</strong> The
+section frame, the content inside it, each card, each row of cards, each button. The
+test: select any frame that holds more than one thing — it should show Auto Layout in the
+right panel. The only exceptions are pictures — an illustration, a diagram, a visual
+composed of several shapes and photos — which are exported as one image (<a class="rule-ref" href="#ast-07">AST-07</a>)</li>
+<li class="rule" id="al-02"><span class="rule-head"><a class="rule-id" href="#al-02">AL-02</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Space is gap and padding, never objects.</strong> No empty
+rectangles or empty frames used as spacers, no items positioned by dragging. If two
+things are 40px apart, that 40 is the gap of the frame that holds them</li>
+<li class="rule" id="al-03"><span class="rule-head"><a class="rule-id" href="#al-03">AL-03</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Text boxes are never fixed height.</strong> Set text to
+<code>Auto width</code> for short labels and <code>Auto height</code> (fixed width) for paragraphs. A
+fixed-height text box clips or overflows as soon as the copy changes, and copy always
+changes</li>
+<li class="rule" id="al-04"><span class="rule-head"><a class="rule-id" href="#al-04">AL-04</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">flagged by the plugin</span></span> <strong>Choose Fill, Hug or Fixed on purpose.</strong> Content
+columns and cards in a row are <code>Fill</code>; buttons, tags and labels are <code>Hug</code>; only things
+that really have one size — an icon, a logo, an avatar — are <code>Fixed</code>. A card set to
+<code>Fixed 427px</code> is built as 427px and does not shrink on a laptop screen</li>
+<li class="rule" id="al-05"><span class="rule-head"><a class="rule-id" href="#al-05">AL-05</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">flagged by the plugin</span></span> <strong>Absolute position only for real overlap.</strong>
+Decoration behind the content, a badge on the corner of a card, a label over a photo.
+Use <code>Absolute position</code> on a child <strong>inside</strong> an Auto Layout frame, so the rest of the
+frame still flows. Never absolute-position ordinary content just to put it somewhere</li>
+<li class="rule" id="al-06"><span class="rule-head"><a class="rule-id" href="#al-06">AL-06</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Use frames, not groups, for layout.</strong> A group has no
+Auto Layout, no padding and no size of its own. Groups are fine inside artwork that is
+exported as one image, and nowhere else</li>
+<li class="rule" id="al-07"><span class="rule-head"><a class="rule-id" href="#al-07">AL-07</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">flagged by the plugin</span></span> <strong>One content width, built the same way in every
+section.</strong> A full-width section frame (<code>Fill</code>) holds a content frame of the project&#39;s
+content width (for example 1200 or 1280), centred by the section&#39;s alignment. Do not
+centre content by adding left padding that happens to add up</li>
+<li class="rule" id="al-08"><span class="rule-head"><a class="rule-id" href="#al-08">AL-08</a><span class="tag should">SHOULD</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Repeated items share one parent.</strong> Three cards in a
+row are three children of one horizontal Auto Layout frame with one gap — not three
+frames placed next to each other. Six cards in two rows are one frame with <code>Wrap</code> on, not
+two rows. This is how the kit knows they are a list</li>
+<li class="rule" id="al-09"><span class="rule-head"><a class="rule-id" href="#al-09">AL-09</a><span class="tag should">SHOULD</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Resize to test.</strong> Before handing over, drag the width
+of a section narrower and wider. If things overlap, jump or leave gaps, the code will do
+the same. This one minute finds most of the AL rules above</li>
+</ul>
+<h2 id="variables-and-styles"><a class="heading-link" href="#variables-and-styles">Variables and styles</a></h2>
+<p>A value with a name can be changed in one place. A value without one is copied into the
+code as a raw number, and the next change has to find every copy.</p>
+<ul>
+<li class="rule" id="var-01"><span class="rule-head"><a class="rule-id" href="#var-01">VAR-01</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Every colour is a colour variable.</strong> Fills, strokes,
+text, gradient stops, and the colour of every shadow. No hex values typed into the
+panel. This includes a colour used only once: it still gets a variable</li>
+<li class="rule" id="var-02"><span class="rule-head"><a class="rule-id" href="#var-02">VAR-02</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Every variable has a value.</strong> A variable that exists
+but resolves to nothing is not a colour — the kit reports it and stops</li>
+<li class="rule" id="var-03"><span class="rule-head"><a class="rule-id" href="#var-03">VAR-03</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>No near-duplicates.</strong> <code>#1A4FD0</code> and <code>#1A4FD1</code>, or one
+blue as a variable and the same blue typed as hex somewhere else, are one colour. Use the
+variable in both places</li>
+<li class="rule" id="var-04"><span class="rule-head"><a class="rule-id" href="#var-04">VAR-04</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Gradients are paint styles, and their stops are
+variables.</strong> A gradient used twice is one style, not two copies with slightly different
+angles</li>
+<li class="rule" id="var-05"><span class="rule-head"><a class="rule-id" href="#var-05">VAR-05</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Shadows and blurs are effect styles.</strong> One visual
+effect, one style. The same card glow at 15% on one page and 20% on another is either two
+deliberate styles with two names, or one style used in both places</li>
+<li class="rule" id="var-06"><span class="rule-head"><a class="rule-id" href="#var-06">VAR-06</a><span class="tag should">SHOULD</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Spacing and radius come from a scale.</strong> Keep number
+variables for spacing (for example 4, 8, 12, 16, 20, 24, 32, 40, 60, 80) and radius, and
+use them. A gap of 19 next to a gap of 20 is almost always a slip, and the code copies
+the slip</li>
+<li class="rule" id="var-07"><span class="rule-head"><a class="rule-id" href="#var-07">VAR-07</a><span class="tag should">SHOULD</span><span class="tag level">L2</span><span class="tag checker">checked by a person</span></span> <strong>Name variables by role or family.</strong> <code>color/primary</code>,
+<code>color/gray-900</code>, <code>color/text-muted</code>, <code>space/40</code>. The names become names in the code, so
+a name that says what the colour is for outlives a name that says what it looks like</li>
+</ul>
+<h2 id="text"><a class="heading-link" href="#text">Text</a></h2>
+<ul>
+<li class="rule" id="txt-01"><span class="rule-head"><a class="rule-id" href="#txt-01">TXT-01</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Every text uses a text style.</strong> Font, size, weight,
+line height and letter spacing all come from the style. A text with local overrides is a
+new style nobody named</li>
+<li class="rule" id="txt-02"><span class="rule-head"><a class="rule-id" href="#txt-02">TXT-02</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Only fonts the website can load.</strong> Agree the font list
+with the developer before you start, and use nothing else. System fonts on your machine —
+SF Pro, Arial, Hiragino, Helvetica — do not exist on the visitor&#39;s machine, and the page
+falls back to something else with a different width</li>
+<li class="rule" id="txt-03"><span class="rule-head"><a class="rule-id" href="#txt-03">TXT-03</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Only the agreed weights.</strong> Every weight is a separate
+file the visitor downloads. If the project loads 400, 500 and 700, a 900 in the design
+renders as a fake bold</li>
+<li class="rule" id="txt-04"><span class="rule-head"><a class="rule-id" href="#txt-04">TXT-04</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">flagged by the plugin</span></span> <strong>Text is live text.</strong> Never outline text, and
+never put text inside an image. Text in an image cannot be translated, searched, read by
+a screen reader or edited by the client</li>
+<li class="rule" id="txt-05"><span class="rule-head"><a class="rule-id" href="#txt-05">TXT-05</a><span class="tag should">SHOULD</span><span class="tag level">L2</span><span class="tag checker">checked by a person</span></span> <strong>Line height and letter spacing are set in the
+style</strong>, in % or px, and the same role uses the same style on every page. A heading
+tracked 3% on one page and 5% on another is two styles or one slip</li>
+</ul>
+<h2 id="components"><a class="heading-link" href="#components">Components</a></h2>
+<ul>
+<li class="rule" id="cmp-01"><span class="rule-head"><a class="rule-id" href="#cmp-01">CMP-01</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">checked by the plugin</span></span> <strong>Anything used on two pages is a component</strong>, placed as
+an instance and never detached. Header, footer, buttons, tags, cards, breadcrumbs, the
+CTA band. The kit turns one component into one piece of code; two copies become two
+pieces of code that drift apart</li>
+<li class="rule" id="cmp-02"><span class="rule-head"><a class="rule-id" href="#cmp-02">CMP-02</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">flagged by the plugin</span></span> <strong>The same block with different text is the same
+component with overridden text</strong>, not a duplicated frame. When a block looks the same on
+two pages but is not, make the difference a variant or a property</li>
+<li class="rule" id="cmp-03"><span class="rule-head"><a class="rule-id" href="#cmp-03">CMP-03</a><span class="tag must">MUST</span><span class="tag level">L4</span><span class="tag checker">checked by the plugin</span></span> <strong>Everything clickable has its states.</strong> Buttons, links,
+tabs, cards that are links: a component property named <code>State</code> with at least <code>Default</code>
+and <code>Hover</code>, and <code>Current</code>, <code>Open</code>, <code>Disabled</code> or <code>Focus</code> where they apply. A button with
+no hover state is built as a button that does not respond</li>
+<li class="rule" id="cmp-04"><span class="rule-head"><a class="rule-id" href="#cmp-04">CMP-04</a><span class="tag must">MUST</span><span class="tag level">L4</span><span class="tag checker">flagged by the plugin</span></span> <strong>Open states are drawn.</strong> The menu open, the
+drawer open, the language switcher open, the accordion open, the modal. If it opens, draw
+it open once. Put these frames on the <code>Components</code> or <code>Spec</code> page</li>
+<li class="rule" id="cmp-05"><span class="rule-head"><a class="rule-id" href="#cmp-05">CMP-05</a><span class="tag should">SHOULD</span><span class="tag level">L2</span><span class="tag checker">checked by a person</span></span> <strong>Components live on the <code>Components</code> page</strong>, grouped
+in sections. Instances on page frames point there</li>
+</ul>
+<h2 id="small-screen"><a class="heading-link" href="#small-screen">Small screen</a></h2>
+<ul>
+<li class="rule" id="sp-01"><span class="rule-head"><a class="rule-id" href="#sp-01">SP-01</a><span class="tag must">MUST</span><span class="tag level">L3</span><span class="tag checker">checked by the plugin</span></span> <strong>Every desktop page has a small-screen frame</strong> with the
+same path name (<a class="rule-ref" href="#file-01">FILE-01</a>). If a page will have no small-screen design, write that down
+(<a class="rule-ref" href="#spec-02">SPEC-02</a>) so it is a decision and not a gap</li>
+<li class="rule" id="sp-02"><span class="rule-head"><a class="rule-id" href="#sp-02">SP-02</a><span class="tag must">MUST</span><span class="tag level">L3</span><span class="tag checker">checked by the plugin</span></span> <strong>Same sections, same names, same order.</strong> <code>section-news</code>
+on the desktop frame is <code>section-news</code> on the small-screen frame. The kit pairs them by
+name</li>
+<li class="rule" id="sp-03"><span class="rule-head"><a class="rule-id" href="#sp-03">SP-03</a><span class="tag must">MUST</span><span class="tag level">L3</span><span class="tag checker">flagged by the plugin</span></span> <strong>Same content.</strong> The same copy, the same number of
+items, the same people on the same cards. Content that is really hidden on small
+screens is marked with a note (<a class="rule-ref" href="#spec-01">SPEC-01</a>), not just left out. A missing item, a duplicated
+card or a card with another card&#39;s details is easy to miss when the frames are drawn
+separately — compare them side by side</li>
+<li class="rule" id="sp-04"><span class="rule-head"><a class="rule-id" href="#sp-04">SP-04</a><span class="tag must">MUST</span><span class="tag level">L3</span><span class="tag checker">checked by the plugin</span></span> <strong>Same variables and styles.</strong> A paragraph that is
+<code>color/black</code> on desktop and <code>color/gray-900</code> on small screen is two colours in the code.
+If it is meant to differ, both are still variables and the note says why</li>
+<li class="rule" id="sp-05"><span class="rule-head"><a class="rule-id" href="#sp-05">SP-05</a><span class="tag should">SHOULD</span><span class="tag level">L3</span><span class="tag checker">flagged by the plugin</span></span> <strong>The small screen is complete.</strong> A small-screen
+frame much shorter than its desktop frame usually has something missing: stacking makes
+a page taller, not shorter</li>
+</ul>
+<h2 id="assets"><a class="heading-link" href="#assets">Assets</a></h2>
+<p>The kit exports images and icons straight from your layers, and the file name comes from
+the layer name. The client receives those files.</p>
+<ul>
+<li class="rule" id="ast-01"><span class="rule-head"><a class="rule-id" href="#ast-01">AST-01</a><span class="tag must">MUST</span><span class="tag level">L3</span><span class="tag checker">checked by the plugin</span></span> <strong>Name every image and icon for what it is.</strong> Lowercase
+English, hyphens, general to specific: <code>icon-arrow-right</code>, <code>logo-partner</code>, <code>hero-visual</code>,
+<code>case-study-thumbnail</code>. Figma&#39;s default names — <code>Group 123</code>, <code>Frame 456</code>, <code>Rectangle 4</code>,
+<code>image 11</code>, <code>Vector</code> — become file names nobody can read</li>
+<li class="rule" id="ast-02"><span class="rule-head"><a class="rule-id" href="#ast-02">AST-02</a><span class="tag must">MUST</span><span class="tag level">L3</span><span class="tag checker">flagged by the plugin</span></span> <strong>One asset, one node.</strong> Each icon, logo or
+illustration is a single frame or component that exports as one file. An icon made of
+five loose vectors placed next to each other exports as five files, or not at all.
+Put it in one frame and give the frame an export setting (<a class="rule-ref" href="#ast-07">AST-07</a>)</li>
+<li class="rule" id="ast-03"><span class="rule-head"><a class="rule-id" href="#ast-03">AST-03</a><span class="tag must">MUST</span><span class="tag level">L3</span><span class="tag checker">flagged by the plugin</span></span> <strong>Every asset exports.</strong> Right-click, export, and
+check the file comes out. A node that returns nothing — often a mask, a boolean or a
+video fill — cannot be put on the page</li>
+<li class="rule" id="ast-04"><span class="rule-head"><a class="rule-id" href="#ast-04">AST-04</a><span class="tag must">MUST</span><span class="tag level">L3</span><span class="tag checker">checked by the plugin</span></span> <strong>No invisible layers.</strong> Delete hidden layers, 0%
+opacity shapes, empty frames and fully transparent rectangles. The kit cannot tell a
+forgotten layer from a deliberate one</li>
+<li class="rule" id="ast-05"><span class="rule-head"><a class="rule-id" href="#ast-05">AST-05</a><span class="tag should">SHOULD</span><span class="tag level">L3</span><span class="tag checker">checked by a person</span></span> <strong>Photos are cropped by their frame and are high
+enough resolution for 2×.</strong> A 600×400 photo box needs a source at least 1200×800</li>
+<li class="rule" id="ast-06"><span class="rule-head"><a class="rule-id" href="#ast-06">AST-06</a><span class="tag should">SHOULD</span><span class="tag level">L4</span><span class="tag checker">checked by a person</span></span> <strong>Deliver final images</strong>, not layout comps or
+stand-ins. A comp that ships by accident is a problem the developer cannot see</li>
+<li class="rule" id="ast-07"><span class="rule-head"><a class="rule-id" href="#ast-07">AST-07</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">flagged by the plugin</span></span> <strong>A picture made of several layers is one frame
+with an export setting.</strong> A hero visual, a diagram, an illustration, a photo with shapes
+and effects laid over it: anything the page shows as one picture. Wrap all its layers in
+one frame, name the frame (<a class="rule-ref" href="#ast-01">AST-01</a>), and add an <strong>Export</strong> setting to it in the right
+panel (PNG 2× for anything with a photo, SVG for pure vector art). <strong>The export setting
+is the signal</strong>: the kit writes that frame as one image and never looks inside it.
+Without it, the kit rebuilds every small shape as its own element, and a simple picture
+becomes dozens of boxes in the code.
+<strong>You do not need to Flatten.</strong> Flattening cannot be undone and loses your source
+layers; the export setting keeps them editable. Text that is part of the picture itself
+(a label inside a diagram) may stay inside it; text that is page copy may not (<a class="rule-ref" href="#txt-04">TXT-04</a>)</li>
+<li class="rule" id="ast-08"><span class="rule-head"><a class="rule-id" href="#ast-08">AST-08</a><span class="tag must">MUST</span><span class="tag level">L2</span><span class="tag checker">flagged by the plugin</span></span> <strong>A thumbnail or article photo is a single image
+layer.</strong> Post thumbnails, news images, case-study photos — any picture that changes with
+the content — are <strong>one</strong> rectangle or frame with an image fill, cropped by that frame.
+The client will upload a different photo for every post, so the code has one image slot
+and nothing else. A badge, a category label, a &quot;NEW&quot; mark or a frame drawn over the
+photo is the same for every post: keep it as its own layer <strong>next to</strong> the image, not
+inside it, so it stays live on top of whatever photo the client uploads. Never build a
+thumbnail out of several small pictures layered together</li>
+</ul>
+<h2 id="copy-and-links"><a class="heading-link" href="#copy-and-links">Copy and links</a></h2>
+<ul>
+<li class="rule" id="cpy-01"><span class="rule-head"><a class="rule-id" href="#cpy-01">CPY-01</a><span class="tag must">MUST</span><span class="tag level">L4</span><span class="tag checker">flagged by the plugin</span></span> <strong>No dummy copy.</strong> No <code>ダミー</code>, <code>lorem ipsum</code>,
+<code>20xx.xx.xx</code>, <code>テキストが入ります</code> or repeated placeholder paragraphs. The kit never
+invents copy, so dummy text is built as dummy text. Where the client still owes the copy,
+say so in a note (<a class="rule-ref" href="#spec-02">SPEC-02</a>)</li>
+<li class="rule" id="cpy-02"><span class="rule-head"><a class="rule-id" href="#cpy-02">CPY-02</a><span class="tag must">MUST</span><span class="tag level">L4</span><span class="tag checker">checked by a person</span></span> <strong>Proofread.</strong> The code reproduces every character. A
+missing particle or a typo in the design ships in the page, and is asked about as a
+question later</li>
+<li class="rule" id="cpy-03"><span class="rule-head"><a class="rule-id" href="#cpy-03">CPY-03</a><span class="tag must">MUST</span><span class="tag level">L4</span><span class="tag checker">flagged by the plugin</span></span> <strong>Every button and link knows where it goes.</strong>
+Add a prototype link to the target page frame, or a note with the URL. <code>#</code> is not a
+destination. An external link says so</li>
+<li class="rule" id="cpy-04"><span class="rule-head"><a class="rule-id" href="#cpy-04">CPY-04</a><span class="tag should">SHOULD</span><span class="tag level">L4</span><span class="tag checker">checked by the plugin</span></span> <strong>Mark the page&#39;s main heading.</strong> Name the text layer
+of each page&#39;s one main heading <code>h1</code>. The largest text on the page is not always the
+main heading, and only you know which one is</li>
+<li class="rule" id="cpy-05"><span class="rule-head"><a class="rule-id" href="#cpy-05">CPY-05</a><span class="tag should">SHOULD</span><span class="tag level">L4</span><span class="tag checker">checked by a person</span></span> <strong>Text is readable on its background.</strong> Normal text
+needs a contrast of 4.5:1, large text 3:1. Check the lightest point of any gradient or
+photo that text sits on, not only the darkest</li>
+</ul>
+<h2 id="behaviour-notes"><a class="heading-link" href="#behaviour-notes">Behaviour notes</a></h2>
+<p>A frame is a picture; the page moves. Nothing that moves is in a frame, so it has to be in
+a note.</p>
+<ul>
+<li class="rule" id="spec-01"><span class="rule-head"><a class="rule-id" href="#spec-01">SPEC-01</a><span class="tag must">MUST</span><span class="tag level">L4</span><span class="tag checker">checked by a person</span></span> <strong>Everything that moves has a written note.</strong> A
+carousel: autoplay or not, speed, loop, what the dots do. An accordion: which item is
+open first. Scroll animation: what, when, how long. A menu: how it opens and closes.
+&quot;Like the prototype&quot; is not a note unless the prototype actually does it. Put the note
+next to the frame (a Dev Mode annotation or a sticky) or on the <code>Spec</code> page</li>
+<li class="rule" id="spec-02"><span class="rule-head"><a class="rule-id" href="#spec-02">SPEC-02</a><span class="tag must">MUST</span><span class="tag level">L3</span><span class="tag checker">checked by a person</span></span> <strong>Say what is not finished.</strong> A diagram still to be
+drawn, copy the client owes, a page with no small-screen design: draw a clearly labelled
+placeholder box (<code>TBD — diagram</code>), and list it on the <code>Spec</code> page. An unfinished thing
+nobody mentions is found by the developer, late</li>
+<li class="rule" id="spec-03"><span class="rule-head"><a class="rule-id" href="#spec-03">SPEC-03</a><span class="tag should">SHOULD</span><span class="tag level">L4</span><span class="tag checker">checked by a person</span></span> <strong>Page title and description.</strong> The text for the
+browser tab and for search results is not on any artboard. Give it per page, on the
+<code>Spec</code> page</li>
+</ul>
+
+    <footer>54 rules. Generated on 2026-10-12 from <code>rules/design-rules.md</code>.</footer>
+  </main>
+</div>
+</body>
+</html>
